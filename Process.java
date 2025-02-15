@@ -4,6 +4,7 @@ public class Process{
     private int turnaroundTime;
     private int arrivalTime;
     private int waitingTime;
+    private int executionTime;
 
     public Process(int processID,  int arrivalTime, int burstTime)
     {
