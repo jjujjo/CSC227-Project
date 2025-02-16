@@ -35,7 +35,7 @@ public class ProcessScheduling {
             }
 
             if (currentProcess != null && currentProcess != shortest) { //we have a process that is shorter than the process we are working on -> context switch
-                currentTime += contextSwitchTime;
+                currentTime += contextSwitchTime; //we might add a thing here where it will recored the CS which occured to print it in the output
             }
 
             // Process execution
