@@ -1,5 +1,5 @@
 public class Process{
-    private int processID;
+    private String processID;
     private int burstTime;
     private double turnaroundTime;
     private int arrivalTime;
@@ -7,7 +7,7 @@ public class Process{
     private int remainingTime;
     private int completionTime;
 
-    public Process(int processID,  int arrivalTime, int burstTime)
+    public Process(String processID,  int arrivalTime, int burstTime)
     {
         this.processID=processID;
         this.arrivalTime=arrivalTime;
@@ -15,7 +15,7 @@ public class Process{
         this.remainingTime=burstTime;
     }
 
-    public int getProcessID()
+    public String getProcessID()
     {
         return processID;
     }
