@@ -2,7 +2,8 @@ import java.util.List;
 
 public class ProcessScheduling {
 
-    public static void simulateProcess(List<Process> processes) {
+    public void simulateProcess(List<Process> processes) {
+        System.out.println("simulateProcess");
         int currentTime = 0, completed = 0, contextSwitchTime = 1;
         int totalWaitingTime = 0, totalTurnaroundTime = 0;
         int contextSwitchCount = 0; //Counter for context switching
@@ -12,9 +13,8 @@ public class ProcessScheduling {
             Process shortest = null; //initial value we will change later when we find the shortest process
             int minRemainingTime = Integer.MAX_VALUE; //Integer.MAX_VALUE is the largest value for an integer accepted by java -> we do this because we are searching for min, when we compare we want this to be for sure bigger
 
-            Process p;
             // The goal here is to find the process with the shortest remaining time (burst time) 
-            for (p : processes) {
+            for (Process p : processes) {
                 if (p.getArrivalTime() <= currentTime && p.getRemainingTime() > 0) { 
                     if (p.getRemainingTime() < minRemainingTime || 
                         (p.getRemainingTime() == minRemainingTime && p.getArrivalTime() < (shortest != null ? shortest.getArrivalTime() : Integer.MAX_VALUE))) {
@@ -38,7 +38,7 @@ public class ProcessScheduling {
             }
 
             if (currentProcess != null && currentProcess != shortest) { //we have a process that is shorter than the process we are working on -> context switch
-                System.out.printf("-%8d%s" ,currentTime, p.getProcessID());
+                System.out.printf("-%8d%s" ,currentTime, shortest.getProcessID());
                 currentTime += contextSwitchTime; //we might add a thing here where it will recored the CS which occured to print it in the output
                 contextSwitchCount++; // Increment context switching counter
             }

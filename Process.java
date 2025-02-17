@@ -9,6 +9,7 @@ public class Process{
 
     public Process(String processID,  int arrivalTime, int burstTime)
     {
+        System.out.println("Process constructor");
         this.processID=processID;
         this.arrivalTime=arrivalTime;
         this.burstTime=burstTime;
@@ -70,7 +71,7 @@ public class Process{
         this.completionTime=completionTime;
     }
 
-    public void setTurnaroundTime(int turnaroundTime)
+    public void setTurnaroundTime(double turnaroundTime)
     {
         this.turnaroundTime=turnaroundTime;
     }
