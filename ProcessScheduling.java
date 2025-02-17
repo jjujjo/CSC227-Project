@@ -32,7 +32,18 @@ public class ProcessScheduling {
             }
 
             if (shortest == null) {
-                // No process is ready, move time forward
+                // check is it null because all of them the remainingtime is zero
+                boolean allDone = true;
+                for (Process p : processes) {
+                    if (p.getRemainingTime() > 0) {
+                        allDone = false;
+                        break;
+                    }
+                }
+                if (allDone) {
+                    break; // No more runnable processes, exit loop
+                }
+
                 currentTime++;
                 continue;
             }
