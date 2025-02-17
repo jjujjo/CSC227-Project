@@ -2,17 +2,19 @@ import java.util.List;
 
 public class ProcessScheduling {
 
-    public static void simulateSRTF(List<Process> processes) {
+    public static void simulateProcess(List<Process> processes) {
         int currentTime = 0, completed = 0, contextSwitchTime = 1;
         int totalWaitingTime = 0, totalTurnaroundTime = 0;
+        int contextSwitchCount = 0; //Counter for context switching
         Process currentProcess = null; //initial value 
 
         while (completed < processes.size()) { //still we are not done with all processes 
             Process shortest = null; //initial value we will change later when we find the shortest process
             int minRemainingTime = Integer.MAX_VALUE; //Integer.MAX_VALUE is the largest value for an integer accepted by java -> we do this because we are searching for min, when we compare we want this to be for sure bigger
 
+            Process p;
             // The goal here is to find the process with the shortest remaining time (burst time) 
-            for (Process p : processes) {
+            for (p : processes) {
                 if (p.getArrivalTime() <= currentTime && p.getRemainingTime() > 0) { 
                     if (p.getRemainingTime() < minRemainingTime || 
                         (p.getRemainingTime() == minRemainingTime && p.getArrivalTime() < (shortest != null ? shortest.getArrivalTime() : Integer.MAX_VALUE))) {
@@ -24,6 +26,7 @@ public class ProcessScheduling {
                          */
                         shortest = p;
                         minRemainingTime = p.getRemainingTime(); //update the min remaining time so we use it in the comparision the next time we enter the loop
+                        System.out.print(currentTime);
                     }
                 }
             }
@@ -35,7 +38,9 @@ public class ProcessScheduling {
             }
 
             if (currentProcess != null && currentProcess != shortest) { //we have a process that is shorter than the process we are working on -> context switch
-                currentTime += contextSwitchTime;
+                System.out.printf("-%8d%s" ,currentTime, p.getProcessID());
+                currentTime += contextSwitchTime; //we might add a thing here where it will recored the CS which occured to print it in the output
+                contextSwitchCount++; // Increment context switching counter
             }
 
             // Process execution
