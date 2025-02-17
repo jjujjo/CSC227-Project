@@ -5,6 +5,7 @@ public class ProcessScheduling {
     public static void simulateSRTF(List<Process> processes) {
         int currentTime = 0, completed = 0, contextSwitchTime = 1;
         int totalWaitingTime = 0, totalTurnaroundTime = 0;
+        int contextSwitchCount = 0; //Counter for context switching
         Process currentProcess = null; //initial value 
 
         while (completed < processes.size()) { //still we are not done with all processes 
@@ -36,6 +37,7 @@ public class ProcessScheduling {
 
             if (currentProcess != null && currentProcess != shortest) { //we have a process that is shorter than the process we are working on -> context switch
                 currentTime += contextSwitchTime; //we might add a thing here where it will recored the CS which occured to print it in the output
+                contextSwitchCount++; // Increment context switching counter
             }
 
             // Process execution
