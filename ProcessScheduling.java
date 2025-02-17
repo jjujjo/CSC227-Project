@@ -7,6 +7,7 @@ public class ProcessScheduling {
         int currentTime = 0, completed = 0, contextSwitchTime = 1;
         int totalWaitingTime = 0, totalTurnaroundTime = 0;
         int contextSwitchCount = 0; //Counter for context switching
+        int timeAfterSwitch = 0; //for printing format, when a process end I want to keep value of its begin time since last CS
         Process currentProcess = null; //initial value 
 
         while (completed < processes.size()) { //still we are not done with all processes 
@@ -26,12 +27,11 @@ public class ProcessScheduling {
                          */
                         shortest = p;
                         minRemainingTime = p.getRemainingTime(); //update the min remaining time so we use it in the comparision the next time we enter the loop
-                        System.out.print(currentTime);
                     }
                 }
             }
 
-            if (shortest == null) {
+            /*if (shortest == null) {
                 // check is it null because all of them the remainingtime is zero
                 boolean allDone = true;
                 for (Process p : processes) {
@@ -46,11 +46,13 @@ public class ProcessScheduling {
 
                 currentTime++;
                 continue;
-            }
+            }*/
 
             if (currentProcess != null && currentProcess != shortest) { //we have a process that is shorter than the process we are working on -> context switch
-                System.out.printf("-%8d%s" ,currentTime, shortest.getProcessID());
-                currentTime += contextSwitchTime; //we might add a thing here where it will recored the CS which occured to print it in the output
+                System.out.printf("%-10s%s%n" ,(timeAfterSwitch +"-" + currentTime), currentProcess.getProcessID());
+                currentTime += contextSwitchTime;
+                timeAfterSwitch = currentTime;
+                System.out.printf("%-10s%s%n" ,((currentTime-1) + "-" + currentTime), "CS");
                 contextSwitchCount++; // Increment context switching counter
             }
 
@@ -67,6 +69,18 @@ public class ProcessScheduling {
                 
                 totalTurnaroundTime += shortest.getTurnaroundTime();
                 totalWaitingTime += shortest.getWaitingTime();
+                System.out.printf("%-10s%s%n" ,(timeAfterSwitch +"-" + currentTime), shortest.getProcessID());//print process when it ends
+                if (completed == processes.size()){//if there are no more processes then I dont need to do a CS, break bye.
+                    break;
+                }
+
+                //if there are processes still, i need to CS
+                currentTime += contextSwitchTime; 
+                timeAfterSwitch = currentTime;
+                System.out.printf("%-10s%s%n" ,((currentTime-1) + "-" + currentTime), "CS");
+                contextSwitchCount++;
+                currentProcess = null;//because current was terminated
+                continue;//i dont want next code to excute since shortest is the terminated process
             }
 
             currentProcess = shortest;
