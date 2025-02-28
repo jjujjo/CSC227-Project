@@ -4,10 +4,10 @@ import java.util.PriorityQueue;
 
 public class ProcessSchedulingNew {
     public void simulateProcess(List<Process> processes) {
-        // Sort processes by arrival time initially
+        // Sort processes by arrival time
         processes.sort(Comparator.comparingInt(Process::getArrivalTime));
 
-        // Priority Queue for Ready Queue (sorted by Remaining Time, then Arrival Time)
+        // Priority Queue for Ready Queue (sorted by Remaining Time (SJF), then if both have the same Remaining Time sort using Arrival Time (FCFS))
         PriorityQueue<Process> readyQueue = new PriorityQueue<>(
             Comparator.comparingInt(Process::getRemainingTime)
                       .thenComparingInt(Process::getArrivalTime) // FCFS tie-breaker
@@ -17,10 +17,10 @@ public class ProcessSchedulingNew {
         int totalWaitingTime = 0, totalTurnaroundTime = 0, contextSwitchCount = 0;
         int timeAfterSwitch = 0;
         Process currentProcess = null;
-        int index = 0;
+        int index = 0; //to keep track of the elements in the queue
 
         while (completed < processes.size()) {
-            // Add all processes that have arrived to the ready queue
+            // Add all processes that have arrived (arrival time <= current time) to the ready queue 
             while (index < processes.size() && processes.get(index).getArrivalTime() <= currentTime) {
                 readyQueue.add(processes.get(index));
                 index++;
@@ -31,15 +31,15 @@ public class ProcessSchedulingNew {
                 if (index < processes.size()) {
                     currentTime = processes.get(index).getArrivalTime();
                 } else {
-                    break;
+                    break; //break from loop
                 }
                 continue;
             }
 
-            // Get the shortest remaining time process
+            // Get the shortest remaining time process which is the first one in the PQueue
             Process shortest = readyQueue.poll();
 
-            // **Preemption Check**
+            // Preemption Check
             if (currentProcess != null && currentProcess != shortest) {
                 System.out.printf("%-10s%s%n", (timeAfterSwitch + "-" + currentTime), currentProcess.getProcessID());
                 currentTime += contextSwitchTime;
@@ -51,11 +51,10 @@ public class ProcessSchedulingNew {
                 readyQueue.add(currentProcess);
             }
 
-            // **Execute Process for 1 Time Unit**
             shortest.setRemainingTime(shortest.getRemainingTime() - 1);
             currentTime++;
 
-            // **Check if Process is Finished**
+            // Check if Process is Finished
             if (shortest.getRemainingTime() == 0) {
                 completed++;
                 shortest.setCompletionTime(currentTime);
@@ -70,7 +69,7 @@ public class ProcessSchedulingNew {
                     break;
                 }
 
-                // **Context Switch Before Switching to Another Process**
+                // Context Switch Before Switching to Another Process
                 currentTime += contextSwitchTime;
                 timeAfterSwitch = currentTime;
                 System.out.printf("%-10s%s%n", ((currentTime - 1) + "-" + currentTime), "CS");
@@ -79,12 +78,11 @@ public class ProcessSchedulingNew {
                 continue;
             }
 
-            // **Reinsert the Process if Not Finished**
+            // Reinsert the Process if Not Finished
             readyQueue.add(shortest);
             currentProcess = shortest;
         }
 
-        // **Final Statistics**
         System.out.println("\nAverage Turnaround Time: " + (double) totalTurnaroundTime / processes.size());
         System.out.println("Average Waiting Time: " + (double) totalWaitingTime / processes.size());
     }
