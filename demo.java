@@ -1,7 +1,7 @@
 import java.util.*;
 public class demo {
     public static void main(String[] args) {
-        ProcessScheduling p = new ProcessScheduling();
+        ProcessSchedulingNew p = new ProcessSchedulingNew();
         
         Process p1 = new Process("P1", 0, 8);
         Process p2 = new Process("P2", 1, 4);
