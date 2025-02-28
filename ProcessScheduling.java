@@ -3,7 +3,6 @@ import java.util.List;
 public class ProcessScheduling {
 
     public void simulateProcess(List<Process> processes) {
-        System.out.println("simulateProcess");
         int currentTime = 0, completed = 0, contextSwitchTime = 1;
         int totalWaitingTime = 0, totalTurnaroundTime = 0;
         int contextSwitchCount = 0; //Counter for context switching
