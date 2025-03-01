@@ -4,7 +4,7 @@ import java.util.PriorityQueue;
 
 public class ProcessSchedulingNew {
     public void simulateProcess(List<Process> processes) {
-        // Sort processes by arrival time
+        // Sort processes by arrival time in case the user did not enter the processes in order of arrival time
         processes.sort(Comparator.comparingInt(Process::getArrivalTime));
 
         // Priority Queue for Ready Queue (sorted by Remaining Time (SJF), then if both have the same Remaining Time sort using Arrival Time (FCFS))
@@ -17,7 +17,7 @@ public class ProcessSchedulingNew {
         int totalWaitingTime = 0, totalTurnaroundTime = 0, contextSwitchCount = 0;
         int timeAfterSwitch = 0;
         Process currentProcess = null;
-        int index = 0; //to keep track of the elements in the queue
+        int index = 0; //to keep track of the elements in the list
 
         while (completed < processes.size()) {
             // Add all processes that have arrived (arrival time <= current time) to the ready queue 
@@ -26,14 +26,14 @@ public class ProcessSchedulingNew {
                 index++;
             }
 
-            // If no process is available, move time to the next arrival
+            // If no process is available, move time to the next arrival (like if p1 arrives at 0 and has burst time=2 but p2 arrives at 5)
             if (readyQueue.isEmpty()) {
                 if (index < processes.size()) {
                     currentTime = processes.get(index).getArrivalTime();
+                    continue; // go back to the loop header
                 } else {
-                    break; //break from loop
+                    break; //break from loop because all process are done
                 }
-                continue; // go back to the loop header
             } //end if
 
             // Get the shortest remaining time process which is the first one in the PQueue
@@ -46,9 +46,7 @@ public class ProcessSchedulingNew {
                 timeAfterSwitch = currentTime;
                 System.out.printf("%-10s%s%n", ((currentTime - 1) + "-" + currentTime), "CS");
                 contextSwitchCount++;
-                
-                // Put the preempted process back into the ready queue
-                readyQueue.add(currentProcess);
+            
             }
 
             shortest.setRemainingTime(shortest.getRemainingTime() - 1);
@@ -66,7 +64,7 @@ public class ProcessSchedulingNew {
                 System.out.printf("%-10s%s%n", (timeAfterSwitch + "-" + currentTime), shortest.getProcessID());
 
                 if (completed == processes.size()) {
-                    break; // from while loop
+                    break; // from while
                 }
 
                 // Context Switch Before Switching to Another Process
