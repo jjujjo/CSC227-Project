@@ -33,8 +33,8 @@ public class ProcessSchedulingNew {
                 } else {
                     break; //break from loop
                 }
-                continue;
-            }
+                continue; // go back to the loop header
+            } //end if
 
             // Get the shortest remaining time process which is the first one in the PQueue
             Process shortest = readyQueue.poll();
@@ -66,7 +66,7 @@ public class ProcessSchedulingNew {
                 System.out.printf("%-10s%s%n", (timeAfterSwitch + "-" + currentTime), shortest.getProcessID());
 
                 if (completed == processes.size()) {
-                    break;
+                    break; // from while loop
                 }
 
                 // Context Switch Before Switching to Another Process
@@ -81,7 +81,7 @@ public class ProcessSchedulingNew {
             // Reinsert the Process if Not Finished
             readyQueue.add(shortest);
             currentProcess = shortest;
-        }
+        } // end of while loop
 
         System.out.println("\nAverage Turnaround Time: " + (double) totalTurnaroundTime / processes.size());
         System.out.println("Average Waiting Time: " + (double) totalWaitingTime / processes.size());
