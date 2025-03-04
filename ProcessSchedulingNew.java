@@ -37,10 +37,9 @@ public class ProcessSchedulingNew {
             if (readyQueue.isEmpty()) {
                 if (index < processes.size()) {
                     nextArrivalTime = processes.get(index).getArrivalTime();
-                    if (currentTime < nextArrivalTime) {
-                        System.out.printf("%-10s%s%n", (currentTime + "-" + nextArrivalTime), "IDLE");
-                        totalTimeElapsed += nextArrivalTime - currentTime; // Update total time
-                    }
+                    System.out.printf("%-10s%s%n", (currentTime + "-" + nextArrivalTime), "IDLE");
+                    totalTimeElapsed += nextArrivalTime - currentTime; // Update total time
+                    
                     currentTime = nextArrivalTime;
                     timeAfterSwitch = currentTime;
                     continue; // go back to the loop header
@@ -91,7 +90,7 @@ public class ProcessSchedulingNew {
                 }
 
                 // Context Switch Before Switching to Another Process
-                if (!readyQueue.isEmpty()) { //why??
+                if (!readyQueue.isEmpty()) { 
                     currentTime += contextSwitchTime;
 
                     totalTimeElapsed += contextSwitchTime;
