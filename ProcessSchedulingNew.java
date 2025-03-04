@@ -1,16 +1,24 @@
+
 import java.util.Comparator;
 import java.util.List;
+
 import java.util.PriorityQueue;
 
 public class ProcessSchedulingNew {
+
+    private int totalBusyTime = 0;
+    private int totalTimeElapsed = 0;
+    private int nextArrivalTime = 0;
+
     public void simulateProcess(List<Process> processes) {
+
         // Sort processes by arrival time in case the user did not enter the processes in order of arrival time
         processes.sort(Comparator.comparingInt(Process::getArrivalTime));
 
         // Priority Queue for Ready Queue (sorted by Remaining Time (SJF), then if both have the same Remaining Time sort using Arrival Time (FCFS))
         PriorityQueue<Process> readyQueue = new PriorityQueue<>(
-            Comparator.comparingInt(Process::getRemainingTime)
-                      .thenComparingInt(Process::getArrivalTime) // FCFS tie-breaker
+                Comparator.comparingInt(Process::getRemainingTime)
+                        .thenComparingInt(Process::getArrivalTime) // FCFS tie-breaker
         );
 
         int currentTime = 0, completed = 0, contextSwitchTime = 1;
@@ -18,6 +26,9 @@ public class ProcessSchedulingNew {
         int timeAfterSwitch = 0;
         Process currentProcess = null;
         int index = 0; //to keep track of the elements in the list
+        int totalBusyTime = 0;
+        int totalTimeElapsed = 0;
+        int nextArrivalTime = 0;
 
         while (completed < processes.size()) {
             // Add all processes that have arrived (arrival time <= current time) to the ready queue 
@@ -29,7 +40,12 @@ public class ProcessSchedulingNew {
             // If no process is available, move time to the next arrival (like if p1 arrives at 0 and has burst time=2 but p2 arrives at 5)
             if (readyQueue.isEmpty()) {
                 if (index < processes.size()) {
+                    nextArrivalTime = processes.get(index).getArrivalTime();
+                    System.out.printf("%-10s%s%n", (currentTime + "-" + processes.get(index).getArrivalTime()), "idle"); // print idle time
+                    totalTimeElapsed += nextArrivalTime - currentTime;
                     currentTime = processes.get(index).getArrivalTime();
+                    timeAfterSwitch = currentTime;
+
                     continue; // go back to the loop header
                 } else {
                     break; //break from loop because all process are done
@@ -42,15 +58,21 @@ public class ProcessSchedulingNew {
             // Preemption Check
             if (currentProcess != null && currentProcess != shortest) {
                 System.out.printf("%-10s%s%n", (timeAfterSwitch + "-" + currentTime), currentProcess.getProcessID());
-                currentTime += contextSwitchTime;
-                timeAfterSwitch = currentTime;
-                System.out.printf("%-10s%s%n", ((currentTime - 1) + "-" + currentTime), "CS");
-                contextSwitchCount++;
-            
-            }
+                if (!readyQueue.isEmpty()) {
+                    currentTime += contextSwitchTime;
 
+                    totalTimeElapsed += contextSwitchTime;
+
+                    timeAfterSwitch = currentTime;
+                    System.out.printf("%-10s%s%n", ((currentTime - 1) + "-" + currentTime), "CS");
+                    contextSwitchCount++;
+                }
+            }
+            // excute the process 
             shortest.setRemainingTime(shortest.getRemainingTime() - 1);
+            totalBusyTime++;
             currentTime++;
+            totalTimeElapsed++;
 
             // Check if Process is Finished
             if (shortest.getRemainingTime() == 0) {
@@ -68,10 +90,14 @@ public class ProcessSchedulingNew {
                 }
 
                 // Context Switch Before Switching to Another Process
-                currentTime += contextSwitchTime;
-                timeAfterSwitch = currentTime;
-                System.out.printf("%-10s%s%n", ((currentTime - 1) + "-" + currentTime), "CS");
-                contextSwitchCount++;
+                if (!readyQueue.isEmpty()) {
+                    currentTime += contextSwitchTime;
+
+                    totalTimeElapsed += contextSwitchTime;
+                    timeAfterSwitch = currentTime;
+                    System.out.printf("%-10s%s%n", ((currentTime - 1) + "-" + currentTime), "CS");
+                    contextSwitchCount++;
+                }
                 currentProcess = null;
                 continue;
             }
@@ -81,8 +107,20 @@ public class ProcessSchedulingNew {
             currentProcess = shortest;
         } // end of while loop
 
-        System.out.println("\nAverage Turnaround Time: " + (double) totalTurnaroundTime / processes.size());
-        System.out.println("Average Waiting Time: " + (double) totalWaitingTime / processes.size());
+        System.out.println(
+                "\nAverage Turnaround Time: " + (double) totalTurnaroundTime
+                / processes.size()
+        );
+        System.out.println(
+                "Average Waiting Time: " + (double) totalWaitingTime
+                / processes.size()
+        );
+        // Calculate CPU Utilization
+        double cpuUtilization = (double) totalBusyTime / totalTimeElapsed * 100;
+
+        System.out.println(
+                "CPU Utilization:  " + cpuUtilization);
+
     }
 
 }
