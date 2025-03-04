@@ -26,6 +26,8 @@ public class ProcessSchedulingNew {
         int totalTimeElapsed = 0;
         int nextArrivalTime = 0;
 
+        System.out.printf("%-10s%-10s%n", "Time", "Process/CS");
+
         while (completed < processes.size()) {
             // Add all processes that have arrived (arrival time <= current time) to the ready queue 
             while (index < processes.size() && processes.get(index).getArrivalTime() <= currentTime) {

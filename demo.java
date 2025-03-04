@@ -11,16 +11,15 @@ public class demo {
         List<Process> pList = new ArrayList<>();
 
         for (int i = 1; i <= numOfProcess; i++) {
-            System.out.println("Enter Process ID:");
-            String processID = input.next();
-
-            System.out.println("Enter Arrival Time:");
+            String processID = "P" + i;
+            System.out.println("Enter Arrival Time For " + processID + ":");
             int arrivalTime = input.nextInt();
 
-            System.out.println("Enter Burst Time:");
+            System.out.println("Enter Burst Time For " + processID + ":");
             int burstTime = input.nextInt(); 
 
             Process process = new Process(processID, arrivalTime, burstTime);
+            process.setProcessID(processID);
             pList.add(process);
         }
         

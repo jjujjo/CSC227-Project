@@ -7,7 +7,7 @@ public class Process{
     private int remainingTime;
     private int completionTime;
 
-    public Process(String processID,  int arrivalTime, int burstTime)
+    public Process(String processID, int arrivalTime, int burstTime)
     {
         this.processID=processID;
         this.arrivalTime=arrivalTime;
@@ -18,6 +18,10 @@ public class Process{
     public String getProcessID()
     {
         return processID;
+    }
+
+    public void setProcessID(String processID) {
+        this.processID = processID;
     }
 
     public int getCompletionTime()
