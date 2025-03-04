@@ -6,10 +6,6 @@ import java.util.PriorityQueue;
 
 public class ProcessSchedulingNew {
 
-    private int totalBusyTime = 0;
-    private int totalTimeElapsed = 0;
-    private int nextArrivalTime = 0;
-
     public void simulateProcess(List<Process> processes) {
 
         // Sort processes by arrival time in case the user did not enter the processes in order of arrival time
@@ -41,11 +37,12 @@ public class ProcessSchedulingNew {
             if (readyQueue.isEmpty()) {
                 if (index < processes.size()) {
                     nextArrivalTime = processes.get(index).getArrivalTime();
-                    System.out.printf("%-10s%s%n", (currentTime + "-" + processes.get(index).getArrivalTime()), "idle"); // print idle time
-                    totalTimeElapsed += nextArrivalTime - currentTime;
-                    currentTime = processes.get(index).getArrivalTime();
+                    if (currentTime < nextArrivalTime) {
+                        System.out.printf("%-10s%s%n", (currentTime + "-" + nextArrivalTime), "IDLE");
+                        totalTimeElapsed += nextArrivalTime - currentTime; // Update total time
+                    }
+                    currentTime = nextArrivalTime;
                     timeAfterSwitch = currentTime;
-
                     continue; // go back to the loop header
                 } else {
                     break; //break from loop because all process are done
@@ -67,6 +64,9 @@ public class ProcessSchedulingNew {
                     System.out.printf("%-10s%s%n", ((currentTime - 1) + "-" + currentTime), "CS");
                     contextSwitchCount++;
                 }
+                else{ 
+                    timeAfterSwitch = currentTime;
+                }
             }
             // excute the process 
             shortest.setRemainingTime(shortest.getRemainingTime() - 1);
@@ -84,13 +84,14 @@ public class ProcessSchedulingNew {
                 totalTurnaroundTime += shortest.getTurnaroundTime();
                 totalWaitingTime += shortest.getWaitingTime();
                 System.out.printf("%-10s%s%n", (timeAfterSwitch + "-" + currentTime), shortest.getProcessID());
-
+                
+                timeAfterSwitch=currentTime; 
                 if (completed == processes.size()) {
                     break; // from while
                 }
 
                 // Context Switch Before Switching to Another Process
-                if (!readyQueue.isEmpty()) {
+                if (!readyQueue.isEmpty()) { //why??
                     currentTime += contextSwitchTime;
 
                     totalTimeElapsed += contextSwitchTime;
@@ -99,7 +100,7 @@ public class ProcessSchedulingNew {
                     contextSwitchCount++;
                 }
                 currentProcess = null;
-                continue;
+                continue; 
             }
 
             // Reinsert the Process if Not Finished
