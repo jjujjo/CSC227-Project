@@ -120,8 +120,7 @@ public class ProcessSchedulingNew {
         // Calculate CPU Utilization
         double cpuUtilization = (double) totalBusyTime / totalTimeElapsed * 100;
 
-        System.out.println(
-                "CPU Utilization:  " + cpuUtilization);
+        System.out.printf("CPU Utilization: %.2f" , cpuUtilization);
 
     }
 
