@@ -1,27 +1,39 @@
 import java.util.*;
 public class demo {
     public static void main(String[] args) {
-        ProcessSchedulingNew p = new ProcessSchedulingNew();
+        //ProcessSchedulingNew p = new ProcessSchedulingNew();
+        ProcessSchedulingIIX p = new ProcessSchedulingIIX();
 
         Scanner input = new Scanner(System.in);
 
-        System.out.println("Enter the number of processes:");
+        System.out.print("Enter the number of processes:");
         int numOfProcess = input.nextInt();
 
-        List<Process> pList = new ArrayList<>();
+        System.out.print("(");
+        for (int i = 1; i < numOfProcess; i++) {
+            System.out.print("P" + i + ", ");
+        }
+        System.out.println("P" + numOfProcess + ")");
+
+        System.out.println("Arrival times and burst times as follows:");
+
+        //List<Process> pList = new ArrayList<>();
 
         for (int i = 1; i <= numOfProcess; i++) {
             String processID = "P" + i;
-            System.out.println("Enter Arrival Time For " + processID + ":");
+            System.out.print("Enter Arrival Time For " + processID + ": ");
             int arrivalTime = input.nextInt();
 
-            System.out.println("Enter Burst Time For " + processID + ":");
+            System.out.print("Enter Burst Time For " + processID + ": ");
             int burstTime = input.nextInt(); 
 
             Process process = new Process(processID, arrivalTime, burstTime);
-            process.setProcessID(processID);
-            pList.add(process);
+            //process.setProcessID(processID);
+
+            p.addProcess(process);
         }
+
+        p.run();
         
         /*Process p1 = new Process("P1", 0, 8);
         Process p2 = new Process("P2", 1, 4);
@@ -33,6 +45,6 @@ public class demo {
         pList.add(p3);
         pList.add(p4);*/
 
-        p.simulateProcess(pList);
+        //p.simulateProcess(pList);
     }
 }
