@@ -26,6 +26,8 @@ public class ProcessSchedulingNew {
         int totalTimeElapsed = 0;
         int nextArrivalTime = 0;
 
+        System.out.printf("%-10s%-10s%n", "Time", "Process/CS");
+
         while (completed < processes.size()) {
             // Add all processes that have arrived (arrival time <= current time) to the ready queue 
             while (index < processes.size() && processes.get(index).getArrivalTime() <= currentTime) {
@@ -118,8 +120,7 @@ public class ProcessSchedulingNew {
         // Calculate CPU Utilization
         double cpuUtilization = (double) totalBusyTime / totalTimeElapsed * 100;
 
-        System.out.println(
-                "CPU Utilization:  " + cpuUtilization);
+        System.out.printf("CPU Utilization: %.2f" , cpuUtilization);
 
     }
 
