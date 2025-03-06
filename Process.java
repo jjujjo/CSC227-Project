@@ -6,6 +6,7 @@ public class Process{
     private double waitingTime; //I changed to double 
     private int remainingTime;
     private int completionTime;
+    private int startTime;
 
     public Process(String processID, int arrivalTime, int burstTime)
     {
@@ -54,6 +55,11 @@ public class Process{
         return remainingTime;
     }
 
+    public int getStartTime()
+    {
+        return startTime;
+    }
+
     public void setBurstTime(int burstTime)
     {
         this.burstTime=burstTime;
@@ -77,6 +83,11 @@ public class Process{
     public void setTurnaroundTime(double turnaroundTime)
     {
         this.turnaroundTime=turnaroundTime;
+    }
+
+    public void setStartTime(int startTime)
+    {
+        this.startTime=startTime;
     }
 
  }
