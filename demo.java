@@ -1,8 +1,7 @@
 import java.util.*;
 public class demo {
     public static void main(String[] args) {
-        //ProcessSchedulingNew p = new ProcessSchedulingNew();
-        ProcessSchedulingIIX p = new ProcessSchedulingIIX();
+        ProcessSchedulingNew p = new ProcessSchedulingNew();
 
         Scanner input = new Scanner(System.in);
 
@@ -17,7 +16,7 @@ public class demo {
 
         System.out.println("Arrival times and burst times as follows:");
 
-        //List<Process> pList = new ArrayList<>();
+        List<Process> pList = new ArrayList<>();
 
         for (int i = 1; i <= numOfProcess; i++) {
             String processID = "P" + i;
@@ -28,12 +27,10 @@ public class demo {
             int burstTime = input.nextInt(); 
 
             Process process = new Process(processID, arrivalTime, burstTime);
-            //process.setProcessID(processID);
-
-            p.addProcess(process);
+            process.setProcessID(processID);
+            pList.add(process);
         }
 
-        p.run();
         
         /*Process p1 = new Process("P1", 0, 8);
         Process p2 = new Process("P2", 1, 4);
@@ -45,6 +42,6 @@ public class demo {
         pList.add(p3);
         pList.add(p4);*/
 
-        //p.simulateProcess(pList);
+        p.simulateProcess(pList);
     }
 }
