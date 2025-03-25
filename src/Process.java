@@ -8,9 +8,9 @@ public class Process{
     private int completionTime;
     private int startTime;
 
-    public Process(String processID, int arrivalTime, int burstTime)
+    public Process(int index, int arrivalTime, int burstTime)
     {
-        this.processID=processID;
+        this.processID="P"+index;
         this.arrivalTime=arrivalTime;
         this.burstTime=burstTime;
         this.remainingTime=burstTime;
